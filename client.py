@@ -1,5 +1,8 @@
 import socket
 
+def interface():
+    return
+
 def name(client_socket):
     data = input("Enter Name: ")
     client_socket.send(data.encode('utf-8'))
@@ -15,6 +18,7 @@ def connect():
 if __name__ == '__main__':  
     client_socket = connect()
     while True:
+        interface()
         data = input("Enter command: ")
         if data.lower() == "disconnect":
             break
@@ -22,5 +26,6 @@ if __name__ == '__main__':
             client_socket.send(data.encode('utf-8'))
             response = client_socket.recv(1024)
             print(response.decode("utf-8"))
+        print("")
 
     client_socket.close()

@@ -67,24 +67,24 @@ def get_machine_ip():
 def handle_client(client_socket, addr):
     try:
         # Receive Name
-        data = client_socket.recv(1024)
-        name = data.decode('utf-8')
+        command = client_socket.recv(1024)
+        name = command.decode('utf-8')
         print(name)
         while True:
-            data = client_socket.recv(1024)
-            # if no data was received, the connection was closed
-            if not data:
+            command = client_socket.recv(1024)
+            # if no command was received, the connection was closed
+            if not command:
                 break
-            # print the received data
-            print(f"Received data from {addr[0]}:{addr[1]}: {data.decode('utf-8')}")
+            # print the received command
+            print(f"Received command from {addr[0]}:{addr[1]}: {command.decode('utf-8')}")
             ##### FMS ######
-            exec_command(data.decode('utf-8'))
+            exec_command(command.decode('utf-8'))
             with open('temp.txt', 'r') as file:
-                data = file.read()
+                response = file.read()
             os.remove("temp.txt")
             ################
             # send a response back to the client
-            client_socket.send(data.encode('utf-8'))
+            client_socket.send(response.encode('utf-8'))
 
     except Exception as e:
         print(f"An error occurred while handling the client {addr[0]}:{addr[1]}: {e}")
