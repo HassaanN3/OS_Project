@@ -3,7 +3,6 @@ import socket
 def name(client_socket):
     data = input("Enter Name: ")
     client_socket.send(data.encode('utf-8'))
-    client_socket.recv(1024)
 
 def connect():
     #server_ip = input("Enter the server's IP address: ")
