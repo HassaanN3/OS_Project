@@ -8,6 +8,9 @@ def get_machine_ip():
 
 def handle_client(client_socket, addr):
     try:
+        # Receive Name
+        data = client_socket.recv(1024)
+        name = data.decode('utf-8')
         while True:
             data = client_socket.recv(1024)
             # if no data was received, the connection was closed
@@ -15,8 +18,11 @@ def handle_client(client_socket, addr):
                 break
             # print the received data
             print(f"Received data from {addr[0]}:{addr[1]}: {data.decode('utf-8')}")
+            ##### FMS ######
+            response = ""
+            ################
             # send a response back to the client
-            client_socket.send(b"Thank you for sending data!")
+            client_socket.send(response.encode('utf-8'))
 
     except Exception as e:
         print(f"An error occurred while handling the client {addr[0]}:{addr[1]}: {e}")
