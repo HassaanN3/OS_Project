@@ -2,10 +2,10 @@
  Client server based filed management server
 
 # Group Members
-Hassaan Nadeem - 340187
-Usman Zafar 346560
-Umer Abid Ali - 356883
-Osama Ehsaan - 353698
+1. Hassaan Nadeem - 340187
+2. Usman Zafar 346560
+3. Umer Abid Ali - 356883
+4. Osama Ehsaan - 353698
 
 # To do
 1. Synchronization
