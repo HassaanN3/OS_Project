@@ -8,9 +8,9 @@ Umer Abid Ali - 356883
 Osama Ehsaan - 353698
 
 # To do
-Synchronization
-Timeout
-Name (and pass)
-File list
-Interface
-Cleanup
+1. Synchronization
+2. Timeout
+3. Name (and pass)
+4. File list
+5. Interface
+6. Cleanup
