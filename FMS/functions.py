@@ -1,8 +1,13 @@
-from FMS import classes
 import pickle
+import threading
+from FMS import classes
 from FMS import getSize
 from mmap import PAGESIZE
 from math import ceil
+
+semaphore = threading.Semaphore(1)
+
+lock = []
 
 def loadFromDat(name='FMS/sample.dat'):
     with open(name, 'rb') as file:
@@ -42,8 +47,13 @@ def Open(current_directory,file_name, mode):
             current_directory.hashTable[file_name].read = True
             print(f"File {file_name} from directory {current_directory.path} opened in read mode")
         elif mode.upper() == "WRITE":
-            current_directory.hashTable[file_name].write = True
-            print(f"File {file_name} from directory {current_directory.path} opened in write mode")
+            if current_directory.hashTable[file_name].write == True:     # Already opened
+                print("File {file_name} from directory {current_directory.path} is busy. Please wait...")
+            else:
+                current_directory.hashTable[file_name].write = True
+                print(f"File {file_name} from directory {current_directory.path} opened in write mode")
+                global lock
+                semaphore.acquire()
         else:
             print("Mode can be either read or write")
             return False
@@ -53,9 +63,11 @@ def Open(current_directory,file_name, mode):
         return False  
     
 def Close(file):    #File exists as opened so no need to check existence
-    print(f"{file.name} closed successfully")
+    if file.write == True:
+        semaphore.release()
     file.read = False
     file.write = False
+    print(f"{file.name} closed successfully")
     return False
 
 def mkDir(current_directory, new_directory):
