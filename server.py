@@ -7,9 +7,9 @@ import os
 
 home_directory = classes.Directory(name='home', hashTable=functions.loadFromDat(), path="/")
 
-def exec_command(command, current_directory, curret_file):
+def exec_command(command, current_directory, current_file, name):
     global home_directory
-    with open(f'temp.txt', 'w') as sys.stdout:  #all print statements directed to file
+    with open(f'temp{name}.txt', 'w') as sys.stdout:  #all print statements directed to file
         if "mkdir" in command:  
             words = command.split()    #1 = dir_name
             functions.mkDir(current_directory, words[1])
@@ -54,6 +54,7 @@ def exec_command(command, current_directory, curret_file):
         else:
             print("Invalid command")
         sys.stdout = sys.__stdout__     #redirect Output -> Failsafe incase threading fails before redirecting
+        return current_directory, current_file
 
 def get_machine_ip():
     ip = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -77,10 +78,10 @@ def handle_client(client_socket, addr):
             # print the received command
             print(f"Received command from {addr[0]}:{addr[1]}: {command.decode('utf-8')}")
             ##### FMS ######
-            current_directory, current_file = exec_command(command.decode('utf-8'), current_directory, current_file)
-            with open('temp.txt', 'r') as file:
+            current_directory, current_file = exec_command(command.decode('utf-8'), current_directory, current_file, name)
+            with open(f'temp{name}.txt', 'r') as file:
                 response = file.read()
-            os.remove("temp.txt")
+            os.remove(f"temp{name}.txt")
             ################
             # send a response back to the client
             client_socket.send(response.encode('utf-8'))

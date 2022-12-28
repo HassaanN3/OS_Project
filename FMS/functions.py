@@ -7,8 +7,6 @@ from math import ceil
 
 semaphore = threading.Semaphore(1)
 
-lock = []
-
 def loadFromDat(name='FMS/sample.dat'):
     with open(name, 'rb') as file:
         try:
@@ -47,13 +45,16 @@ def Open(current_directory,file_name, mode):
             current_directory.hashTable[file_name].read = True
             print(f"File {file_name} from directory {current_directory.path} opened in read mode")
         elif mode.upper() == "WRITE":
-            if current_directory.hashTable[file_name].write == True:     # Already opened
-                print("File {file_name} from directory {current_directory.path} is busy. Please wait...")
+            if current_directory.hashTable[file_name].read == True:
+                print(f"File {file_name} from directory {current_directory.path} is currently being read. Please wait...")
             else:
-                current_directory.hashTable[file_name].write = True
-                print(f"File {file_name} from directory {current_directory.path} opened in write mode")
-                global lock
-                semaphore.acquire()
+                if current_directory.hashTable[file_name].write == True:     # Already opened
+                    print(f"File {file_name} from directory {current_directory.path} is currently being written into. Please wait...")
+                else:
+                    current_directory.hashTable[file_name].write = True
+                    print(f"File {file_name} from directory {current_directory.path} opened in write mode")
+                    global lock
+                    semaphore.acquire()
         else:
             print("Mode can be either read or write")
             return False
