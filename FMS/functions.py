@@ -36,7 +36,6 @@ def delete(current_directory, file_name):
     else:
         print(f"{file_name} does not exist in {current_directory.path}")
     
-
 def Open(current_directory,file_name, mode):
     if exists(current_directory, file_name):
         if mode.upper() == "READ":
@@ -53,7 +52,6 @@ def Open(current_directory,file_name, mode):
         print(f"{file_name} does not exist in {current_directory.path}")
         return False  
     
-
 def Close(file):    #File exists as opened so no need to check existence
     print(f"{file.name} closed successfully")
     file.read = False
@@ -94,9 +92,6 @@ def chDir(current_directory, new_directory, mode):
         except KeyError:
             print(f"{new_directory} not found in {current_directory.name}")
     return current_directory
-
-"""def move(current_directory, source_file, target_file):
-    current_directory[target_file] = current_directory[source_file]"""
 
 def printElements(current_directory):
     print(f"\n{current_directory.path}:")

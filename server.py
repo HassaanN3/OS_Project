@@ -6,13 +6,9 @@ import sys
 import os
 
 home_directory = classes.Directory(name='home', hashTable=functions.loadFromDat(), path="/")
-current_directory = home_directory
-current_file = ""
 
-def exec_command(command):
+def exec_command(command, current_directory, curret_file):
     global home_directory
-    global current_directory
-    global current_file
     with open(f'temp.txt', 'w') as sys.stdout:  #all print statements directed to file
         if "mkdir" in command:  
             words = command.split()    #1 = dir_name
@@ -66,6 +62,9 @@ def get_machine_ip():
 
 def handle_client(client_socket, addr):
     try:
+        global home_directory
+        current_directory = home_directory
+        current_file = ""
         # Receive Name
         command = client_socket.recv(1024)
         name = command.decode('utf-8')
@@ -78,7 +77,7 @@ def handle_client(client_socket, addr):
             # print the received command
             print(f"Received command from {addr[0]}:{addr[1]}: {command.decode('utf-8')}")
             ##### FMS ######
-            exec_command(command.decode('utf-8'))
+            current_directory, current_file = exec_command(command.decode('utf-8'), current_directory, current_file)
             with open('temp.txt', 'r') as file:
                 response = file.read()
             os.remove("temp.txt")
