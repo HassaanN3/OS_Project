@@ -54,7 +54,7 @@ def exec_command(command, current_directory, current_file, name):
                     words[2] = "write"
                 elif words[2] == 'r':
                     words[2] = "read"
-                current_file = functions.Open(current_directory, words[1], words[2])
+                current_file = functions.Open(current_directory, words[1], words[2], name)
             except IndexError:
                 print("Provide proper arguments.")
                 print("open <file_name.extension>, <mode>")
@@ -104,6 +104,8 @@ def exec_command(command, current_directory, current_file, name):
             functions.printMemoryMap(home_directory)
         elif "print" in command:
             functions.printElements(current_directory)
+        elif "save" in command:
+            functions.saveInDat(home_directory)
         else:
             print("Invalid command")
         sys.stdout = sys.__stdout__     #redirect Output -> Failsafe incase threading fails before redirecting

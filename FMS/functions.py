@@ -4,8 +4,7 @@ from FMS import classes
 from FMS import getSize
 from mmap import PAGESIZE
 from math import ceil
-
-semaphore = threading.Semaphore(1)
+import sys
 
 def loadFromDat(name='FMS/sample.dat'):
     with open(name, 'rb') as file:
@@ -39,22 +38,22 @@ def delete(current_directory, file_name):
     else:
         print(f"{file_name} does not exist in {current_directory.path}")
     
-def Open(current_directory,file_name, mode):
+def Open(current_directory,file_name, mode, name):
     if exists(current_directory, file_name):
         if mode.upper() == "READ":
+            if current_directory.hashTable[file_name].read == True:
+                current_directory.hashTable[file_name].semaphore.release()
             current_directory.hashTable[file_name].read = True
             print(f"File {file_name} from directory {current_directory.path} opened in read mode")
+            sys.stdout = sys.__stdout__     #redirect Output -> Failsafe incase threading fails before redirecting
+            current_directory.hashTable[file_name].semaphore.acquire()
+            sys.stdout = open(f'text{name}.txt', 'w')
         elif mode.upper() == "WRITE":
-            if current_directory.hashTable[file_name].read == True:
-                print(f"File {file_name} from directory {current_directory.path} is currently being read. Please wait...")
-            else:
-                if current_directory.hashTable[file_name].write == True:     # Already opened
-                    print(f"File {file_name} from directory {current_directory.path} is currently being written into. Please wait...")
-                else:
-                    current_directory.hashTable[file_name].write = True
-                    print(f"File {file_name} from directory {current_directory.path} opened in write mode")
-                    global lock
-                    semaphore.acquire()
+            current_directory.hashTable[file_name].write = True
+            print(f"File {file_name} from directory {current_directory.path} opened in write mode")
+            sys.stdout = sys.__stdout__     #redirect Output -> Failsafe incase threading fails before redirecting
+            current_directory.hashTable[file_name].semaphore.acquire()
+            sys.stdout = open(f'text{name}.txt', 'w')
         else:
             print("Mode can be either read or write")
             return False
@@ -64,10 +63,9 @@ def Open(current_directory,file_name, mode):
         return False  
     
 def Close(file):    #File exists as opened so no need to check existence
-    if file.write == True:
-        semaphore.release()
     file.read = False
     file.write = False
+    file.semaphore.release()
     print(f"{file.name} closed successfully")
     return False
 

@@ -1,3 +1,5 @@
+import threading
+
 class Directory:
     path = ""
     def __init__(self, name, hashTable, path) -> None:
@@ -12,6 +14,7 @@ class File:
         self.path = path + name
         self.read = False
         self.write = False
+        self.semaphore = threading.Semaphore(1)
     
     def writeToFile(self, text, index = 'end') -> None:
         if self.write is True:
