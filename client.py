@@ -8,8 +8,8 @@ def name(client_socket):
     client_socket.send(data.encode('utf-8'))
 
 def connect():
-    #server_ip = input("Enter the server's IP address: ")
-    server_ip = "10.7.80.224"
+    server_ip = input("Enter the server's IP address: ")
+    #server_ip = "10.7.80.224"
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((server_ip, 95))
     name(client_socket) # Sending name to server

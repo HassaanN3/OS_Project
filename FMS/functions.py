@@ -14,7 +14,7 @@ def loadFromDat(name='FMS/sample.dat'):
             loaded_dict = dict()
     return loaded_dict
 
-def saveInDat(home_directory,name='sample.dat'):
+def saveInDat(home_directory,name='FMS/sample.dat'):
     with open(name, 'wb') as file:
         pickle.dump(home_directory.hashTable, file)
 
