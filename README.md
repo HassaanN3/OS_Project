@@ -15,3 +15,4 @@
 5. Interface
 6. Cleanup
 7. Authentication (encoding via hashing)
+8. Testing
