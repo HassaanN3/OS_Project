@@ -17,10 +17,12 @@ def connect():
     
 if __name__ == '__main__':  
     client_socket = connect()
+    interface = client_socket.recv(1024)
+    print(interface.decode("utf-8"))
     while True:
-        interface()
         data = input("Enter command: ")
         if data.lower() == "disconnect":
+            client_socket.send(data.encode('utf-8'))
             break
         else:
             client_socket.send(data.encode('utf-8'))

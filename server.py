@@ -5,7 +5,22 @@ from FMS import functions
 import sys
 import os
 
+interface = """
+\tDistributed File Management System
+
+1. mkdir <dir_name>\t\t2. chdir <dir_name>, <mode>
+3. create <file_name>\t\t4. delete <file_name>
+5. open <file_name>, <mode>\t6. close <file_name>
+7. read <file_name>\t\t8. write <file_name>, <content>
+9. show_memory_map\t\t10. print
+"""
+
 home_directory = classes.Directory(name='home', hashTable=functions.loadFromDat(), path="/")
+
+def get_machine_ip():
+    ip = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    ip.connect(("8.8.8.8", 80)) #Connecting to Google DNS to get IP
+    return ip.getsockname()[0]
 
 def exec_command(command, current_directory, current_file, name):
     global home_directory
@@ -94,16 +109,13 @@ def exec_command(command, current_directory, current_file, name):
         sys.stdout = sys.__stdout__     #redirect Output -> Failsafe incase threading fails before redirecting
         return current_directory, current_file
 
-def get_machine_ip():
-    ip = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    ip.connect(("8.8.8.8", 80)) #Connecting to Google DNS to get IP
-    return ip.getsockname()[0]
-
 def handle_client(client_socket, addr):
     try:
+        global interface
         global home_directory
         current_directory = home_directory
         current_file = ""
+        client_socket.send(interface.encode('utf-8'))
         # Receive Name
         command = client_socket.recv(1024)
         name = command.decode('utf-8')
@@ -111,7 +123,8 @@ def handle_client(client_socket, addr):
         while True:
             command = client_socket.recv(1024)
             # if no command was received, the connection was closed
-            if not command:
+            if command.decode('utf-8').lower() == 'disconnect':
+                print(f"\nUsername: {name}, ip: {addr[0]}:{addr[1]} disconnected from server")
                 break
             # print the received command
             print(f"\nReceived from {addr[0]}:{addr[1]}\nUsername: {name}\nCommand: {command.decode('utf-8')}")
@@ -137,7 +150,7 @@ if __name__ == '__main__':
     host = socket.gethostname()
     server_socket.bind((host, port))
 
-    server_socket.listen(5)
+    server_socket.listen(2)
     print(f"Listening for incoming connections on {device_ip}:{port}...")
 
     while True:

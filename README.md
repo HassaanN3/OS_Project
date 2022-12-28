@@ -12,7 +12,14 @@
 2. Timeout
 3. Name (and pass)
 4. File list
-5. Interface
 6. Cleanup
 7. Authentication (encoding via hashing)
 8. Testing
+
+# Testing and Debugging
+1. Exceptions
+2. client side disconnect
+3. utf-8
+4. client side no interface
+5. Interface
+6. Disconnects
