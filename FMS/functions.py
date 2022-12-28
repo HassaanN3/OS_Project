@@ -54,6 +54,7 @@ def Open(current_directory,file_name, mode, name):
             sys.stdout = sys.__stdout__     #redirect Output -> Failsafe incase threading fails before redirecting
             current_directory.hashTable[file_name].semaphore.acquire()
             sys.stdout = open(f'text{name}.txt', 'w')
+            current_directory.hashTable[file_name].write = True
         else:
             print("Mode can be either read or write")
             return False
