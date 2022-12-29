@@ -15,7 +15,9 @@ interface = """
 9. show_memory_map\t\t10. print
 """
 
-home_directory = classes.Directory(name='home', hashTable=functions.loadFromDat(), path="/")
+# home_directory = classes.Directory(name='home', hashTable=functions.loadFromDat(), path="/")
+
+home_directory = classes.Directory(name='home', hashTable=dict(), path="/")
 
 def get_machine_ip():
     ip = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -152,7 +154,7 @@ if __name__ == '__main__':
     host = socket.gethostname()
     server_socket.bind((host, port))
 
-    server_socket.listen(2)
+    server_socket.listen(5)
     print(f"Listening for incoming connections on {device_ip}:{port}...")
 
     while True:

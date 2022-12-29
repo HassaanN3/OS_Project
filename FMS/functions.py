@@ -48,6 +48,7 @@ def Open(current_directory,file_name, mode, name):
             sys.stdout = sys.__stdout__     #redirect Output -> Failsafe incase threading fails before redirecting
             current_directory.hashTable[file_name].semaphore.acquire()
             sys.stdout = open(f'text{name}.txt', 'w')
+            current_directory.hashTable[file_name].read = True
         elif mode.upper() == "WRITE":
             current_directory.hashTable[file_name].write = True
             print(f"File {file_name} from directory {current_directory.path} opened in write mode")
